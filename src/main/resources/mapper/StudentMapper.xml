@@ -1,0 +1,19 @@
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.hq.treasurechest.mapper.StudentMapper">
+
+    <update id="updateStudentById" flushCache="true">
+        update studentinfo
+        <set>
+            <if test="schoolCode!=null">SCHOOLCODE = #{schoolCode},</if>
+            <if test="projectCode!=null">PROJECTCODE = #{projectCode},</if>
+            <if test="teamIndex!=null">TEAMINDEX = #{teamIndex},</if>
+            <if test="name!=null">PERSONNAME = #{name},</if>
+            <if test="idCard!=null">IDCARD = #{idCard},</if>
+            <if test="tel!=null">TEL = #{tel}</if>
+        </set>
+        where STUDENTID = #{awardeeId}
+    </update>
+
+</mapper>

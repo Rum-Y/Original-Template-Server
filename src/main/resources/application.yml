@@ -1,0 +1,23 @@
+server:
+  port: 8080
+logging:
+  level:
+    org:
+      springframework:
+        security: TRACE
+spring:
+  datasource:
+    url: jdbc:mysql://localhost:3306/information-check
+    username: xxx
+    password: xxx
+    driver-class-name: com.mysql.cj.jdbc.Driver
+  data:
+    redis:
+      host: xxx
+      port: 6379
+      database: 0
+      password: xxx
+
+
+
+

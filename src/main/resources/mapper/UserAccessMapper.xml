@@ -1,0 +1,20 @@
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.hq.treasurechest.mapper.UserAccessMapper">
+    <resultMap id="UserResultMap" type="com.hq.treasurechest.entity.LoginDetail">
+        <id column="id" property="id"/>
+        <result column="userId" property="userId"/>
+        <result column="ipAddress" property="ipAddress"/>
+        <result column="login_location" property="loginLocation"/>
+        <result column="browser" property="browser"/>
+        <result column="os" property="os"/>
+        <result column="login_time" property="loginTime"/>
+    </resultMap>
+    
+    <insert id="insert" parameterType="com.hq.treasurechest.entity.LoginDetail">
+        insert into login_detail(userId,ipAddress,login_location,browser,os,login_time)
+        values (#{userId},#{ipAddress},#{loginLocation},#{browser},#{os},#{loginTime})
+    </insert>
+
+</mapper>

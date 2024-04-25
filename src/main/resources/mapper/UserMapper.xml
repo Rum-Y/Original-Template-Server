@@ -1,0 +1,70 @@
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.hq.treasurechest.mapper.UserMapper">
+    <resultMap id="UserResultMap" type="com.hq.treasurechest.entity.UserInfo">
+        <result column="USERNAME" property="username"/>
+        <result column="SCHOOLCODE" property="schoolCode"/>
+        <result column="PASSWORD" property="password"/>
+        <result column="ISLOCKED" property="isLocked"/>
+        <collection property="roles" ofType="com.hq.treasurechest.entity.Role">
+            <id column="role_id" property="id"/>
+            <result column="role_name" property="name"/>
+        </collection>
+    </resultMap>
+
+    <resultMap id="UserInfoVoMap" type="com.hq.treasurechest.vo.UserInfoVo">
+        <id column="ID" property="id"/>
+        <result column="username" property="username"/>
+        <result column="SCHOOLCODE" property="schoolCode"/>
+        <result column="ISLOCKED" property="isLocked"/>
+        <result column="FIRSTLOGINTIME" property="firstLoginTime"/>
+        <result column="LASTLOGINTIME" property="lastLoginTime"/>
+    </resultMap>
+
+    <select id="findUserAndRolesByUsername" resultMap="UserResultMap" parameterType="String">
+        SELECT u.SCHOOLCODE as username, u.SCHOOLCODE, u.PASSWORD, u.ISLOCKED, r.id AS role_id, r.name AS role_name
+        FROM userinfo u
+                 JOIN user_role ur ON u.SCHOOLCODE = ur.SCHOOLCODE
+                 JOIN role r ON ur.role_id = r.id
+        WHERE u.SCHOOLCODE = #{schoolCode}
+    </select>
+
+    <select id="IsFirstLogin" parameterType="String">
+        select FIRSTLOGINTIME from userinfo where SCHOOLCODE = #{schoolCode}
+    </select>
+
+    <select id="findAllUserinfo" resultMap="UserInfoVoMap">
+        select ID, USERNAME, SCHOOLCODE, ISLOCKED, FIRSTLOGINTIME, LASTLOGINTIME from userinfo
+    </select>
+
+    <update id="setFirstAndLastLoginTime" parameterType="String">
+        update userinfo
+        <set>
+            <if test="systemNowTime!=null">FIRSTLOGINTIME = #{systemNowTime},</if>
+            <if test="systemNowTime!=null">LASTLOGINTIME = #{systemNowTime}</if>
+        </set>
+        where SCHOOLCODE = #{schoolCode}
+    </update>
+
+    <update id="setLastLoginTime" parameterType="String">
+        update userinfo
+        <set>
+            <if test="systemNowTime!=null">LASTLOGINTIME = #{systemNowTime}</if>
+        </set>
+        where SCHOOLCODE = #{schoolCode}
+    </update>
+
+    <update id="updateLockStateToLock" parameterType="String">
+        update userinfo
+        set ISLOCKED = '1'
+        where SCHOOLCODE = #{schoolCode}
+    </update>
+
+    <update id="updateLockStateToUnLock" parameterType="String">
+        update userinfo
+        set ISLOCKED = '0'
+        where SCHOOLCODE = #{schoolCode}
+    </update>
+
+</mapper>

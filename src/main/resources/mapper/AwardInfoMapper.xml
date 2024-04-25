@@ -1,0 +1,37 @@
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.hq.treasurechest.mapper.AwardInfoMapper">
+    <resultMap id="AwardResultMap" type="com.hq.treasurechest.vo.AwardInfoVo">
+        <id column="ID" property="id"/>
+        <result column="SCHOOLCODE" property="schoolCode"/>
+        <result column="USERNAME" property="username"/>
+        <result column="PROJECTCODE" property="projectCode"/>
+        <result column="PROJECTNAME" property="projectName"/>
+        <result column="TEAMINDEX" property="teamIndex"/>
+        <result column="AWARD" property="award"/>
+        <result column="REMARK" property="remark"/>
+    </resultMap>
+    <resultMap id="AwardeeMap" type="com.hq.treasurechest.vo.AwardeeVo">
+        <result column="TEACHERID" property="awardeeId"/>
+        <result column="SCHOOLCODE" property="schoolCode"/>
+        <result column="PROJECTCODE" property="projectCode"/>
+        <result column="TEAMINDEX" property="teamIndex"/>
+        <result column="PERSONNAME" property="name"/>
+        <result column="IDCARD" property="idCard"/>
+        <result column="TEL" property="tel"/>
+    </resultMap>
+    <select id="findAllAwardInfoBySchoolCode" resultMap="AwardResultMap" parameterType="String">
+        SELECT a.SCHOOLCODE, u.USERNAME, a.PROJECTCODE, p.PROJECTNAME, a.TEAMINDEX, a.AWARD, a.REMARK from awardinfo as a
+               JOIN userinfo u ON a.SCHOOLCODE = u.SCHOOLCODE
+               JOIN projectinfo p ON a.PROJECTCODE = p.PROJECTCODE
+        WHERE a.SCHOOLCODE = #{schoolCode} ORDER BY a.PROJECTCODE
+    </select>
+    <select id="findAwardeeBySPT" resultMap="AwardeeMap" parameterType="String">
+        SELECT TEACHERID, SCHOOLCODE, PROJECTCODE, TEAMINDEX, PERSONNAME, IDCARD, TEL FROM teacherinfo
+        WHERE SCHOOLCODE=#{schoolCode} AND PROJECTCODE = #{projectCode} AND TEAMINDEX = #{teamIndex}
+        UNION ALL
+        SELECT STUDENTID, SCHOOLCODE, PROJECTCODE, TEAMINDEX, PERSONNAME, IDCARD, TEL FROM studentinfo
+        WHERE SCHOOLCODE=#{schoolCode} AND PROJECTCODE = #{projectCode} AND TEAMINDEX = #{teamIndex}
+    </select>
+</mapper>
